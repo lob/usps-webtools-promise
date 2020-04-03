@@ -1,9 +1,9 @@
 {
-  "name": "usps-webtools",
-  "author": "Sherod Taylor <sherodtaylor@gmail.com>",
-  "description": "Api wrapper for the USPS Web-Tools",
-  "version": "1.0.3",
-  "main": "./src/usps",
+  "name": "usps-webtools-promise",
+  "author": "Kyle McNally <kyle@kmcnally.net>",
+  "description": "API wrapper for the USPS Web-Tools, with Promises!",
+  "version": "2.0.0",
+  "main": "./dist/usps.js",
   "contributors": [
     {
       "name": "Sherod Taylor",
@@ -19,8 +19,9 @@
     }
   ],
   "scripts": {
-    "lint": "bash ./bash/lint.sh",
-    "test": "bash ./bash/test.sh"
+    "lint": "eslint \"src/**/*.ts\"",
+    "build": "tsc -p tsconfig.json",
+    "test": "nyc ava"
   },
   "keywords": [
     "usps",
@@ -32,19 +33,31 @@
     "standardization"
   ],
   "dependencies": {
-    "request": "^2.85.0",
-    "xml2js": "0.4.4",
-    "xmlbuilder": "^8.2.2"
+    "lodash.merge": "^4.6.2",
+    "xmlbuilder2": "^2.1.1"
   },
   "devDependencies": {
-    "ava": "^0.25.0",
-    "babel-eslint": "8.0.1",
-    "eslint": "4.10.0",
-    "jscs": "3.0.7"
+    "@types/lodash.merge": "^4.6.6",
+    "@types/node": "^13.9.8",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
+    "ava": "^3.5.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-config-unicorn": "^0.5.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-unicorn": "^18.0.1",
+    "nyc": "^15.0.0",
+    "prettier": "^2.0.2",
+    "typescript": "^3.8.3"
   },
-  "repository": "https://github.com/MadisonReed/usps-webtools.git",
+  "repository": "https://github.com/Sparticuz/usps-webtools-promise.git",
   "engines": {
-    "node": ">=8.x"
+    "node": ">=10.x"
   },
   "license": "MIT"
 }
