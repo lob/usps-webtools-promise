@@ -1,3 +1,4 @@
+import merge from "lodash.merge";
 /**
     Custom USPS Webtools error
     Inspiration: http://www.devthought.com/2011/12/22/a-string-is-not-an-error/
@@ -13,20 +14,13 @@
     @param {String} msg The relevant error message
     @param {Error|String|Object} [original] The original error being extended
 */
-class USPSError extends Error {
-  constructor(message, ...additions) {
+export default class USPSError extends Error {
+  constructor(message: string, ...additions: any) {
     super(message);
 
-    // addition should be an {} obj (possibly an Error)
-    for (let addition of additions) {
-      for (let key in addition) {
-        this[key] = addition[key];
-      }
-    }
+    merge(this, additions);
 
-    this.name = 'USPS Webtools Error';
-    this.message = typeof message === 'string' ? message : 'An error occurred';
+    this.name = "USPS Webtools Error";
+    this.message = message;
   }
 }
-
-module.exports = USPSError;
