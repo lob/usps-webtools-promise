@@ -1,63 +1,50 @@
-const USPS = require('../');
-const { test } = require('ava');
+const USPS = require('../').default;
+const test = require('ava');
 
 const usps = new USPS({
-  server: 'http://production.shippingapis.com/ShippingAPI.dll',
-  userId: process.env.USPS_USER_ID
+  userId: "325DAZSE5889",
 });
 
-test.cb('Address verify should validate apartment', t => {
-  usps.verify({
+test('Address verify should validate apartment', async t => {
+  const address = await usps.verify({
     street1: '11205 SE 233RD PL.',
     street2: 'Apartment 2',
     city: 'Kent',
     state: 'WA',
     zip: '98031'
-  }, (err, address) => {
-    t.falsy(err);
-    t.is(address.street2, 'APT 2');
-    t.end();
   });
+  t.is(address.Address2, 'APT 2');
 });
 
-test.cb('Address verify should validate Unit', t => {
-  usps.verify({
+test('Address verify should validate Unit', async t => {
+  const address = await usps.verify({
     street1: '11205 SE 233RD PL.',
     street2: 'UNIT 2',
     city: 'Kent',
     state: 'WA',
     zip: '98031'
-  }, (err, address) => {
-    t.falsy(err);
-    t.is(address.street2, 'UNIT 2');
-    t.end();
   });
+  t.is(address.Address2, 'UNIT 2');
 });
 
-test.cb('Address verify should validate Building', t => {
-  usps.verify({
-    street1: '11205 SE 233RD PL.',
+test('Address verify should validate Building', async t => {
+  const address = await usps.verify({
+    street1: '11205 southeast 233Road PLace.',
     street2: 'Building 2',
     city: 'Kent',
     state: 'WA',
     zip: '98031'
-  }, (err, address) => {
-    t.falsy(err);
-    t.is(address.street2, 'BLDG 2');
-    t.end();
   });
+  t.is(address.Address2, 'BLDG 2');
 });
 
-test.cb('Address verify should validate Floor', t => {
-  usps.verify({
+test('Address verify should validate Floor', async t => {
+  const address = await usps.verify({
     street1: '11205 SE 233RD PL.',
     street2: 'Floor 2',
     city: 'Kent',
     state: 'WA',
     zip: '98031'
-  }, (err, address) => {
-    t.falsy(err);
-    t.is(address.street2, 'FL 2');
-    t.end();
   });
+  t.is(address.Address2, 'FL 2');
 });

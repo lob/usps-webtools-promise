@@ -1,68 +1,55 @@
-const USPS = require('../');
-const { test } = require('ava');
+const USPS = require('../').default;
+const test = require('ava');
 
 const usps = new USPS({
-  server: 'http://production.shippingapis.com/ShippingAPI.dll',
-  userId: process.env.USPS_USER_ID
+  userId: "325DAZSE5889"
 });
 
-const ZIP = '94607-3785';
+const ZIP = "94607";
 
-test.cb('Zipcode Lookup should return the address with zip', t => {
-  usps.zipCodeLookup({
+test('Zipcode Lookup should return the address with zip', async t => {
+  const address = await usps.zipCodeLookup({
     street1: '121 Embarcadero West',
     street2: 'Apt 2205',
     city: 'Oakland',
     state: 'CA'
-  }, (err, address) => {
-    t.falsy(err);
-    t.is(address.zip, ZIP);
-    t.end();
   });
+  t.is(address.Zip5, ZIP);
 });
 
-test.cb('Zipcode Lookup should error if address is invalid', t => {
-  usps.zipCodeLookup({
+test('Zipcode Lookup should error if address is invalid', async t => {
+  const address = await usps.zipCodeLookup({
     street1: 'sdfisd',
     street2: 'Apt 2205',
     city: 'Seattle',
     state: 'WA'
-  }, err => {
-    t.truthy(err);
-    t.is(err.message, 'Address Not Found.');
-    t.end();
   });
+  t.is(address.message,'Address Not Found.');
 });
 
-test.cb('Zipcode Lookup should pass error to callback if street is missing', t => {
-  usps.zipCodeLookup({
+test('Zipcode Lookup should pass error to callback if street is missing', async t => {
+  const address = await usps.zipCodeLookup({
     city: 'Oakland',
     state: 'CA'
-  }, err => {
-    t.truthy(err);
-    t.end();
   });
+  t.truthy(address);
 });
 
-test.cb('Zipcode Lookup error should be passed to callback if city is missing', t => {
-  usps.zipCodeLookup({
+test('Zipcode Lookup error should be passed to callback if city is missing', async t => {
+  const address = await usps.zipCodeLookup({
     street1: '121 Embarcadero West',
     street2: 'Apt 2205',
     state: 'CA'
-  }, err => {
-    t.truthy(err);
-    t.end();
   });
+  t.truthy(address);
 });
 
-test.cb('Zipcode Lookup should return an error if the address is fake', t => {
-  usps.zipCodeLookup({
+test('Zipcode Lookup should return an error if the address is fake', async t => {
+  const address = await usps.zipCodeLookup({
     street1: '453 sdfsdfa Road',
     street2: 'sdfadf',
     city: 'kojs',
     state: 'LS'
-  }, err => {
-    t.truthy(err);
-    t.end();
   });
+  t.truthy(address);
 });

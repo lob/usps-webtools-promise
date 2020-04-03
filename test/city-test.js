@@ -1,30 +1,21 @@
-const USPS = require('../');
-const { test } = require('ava');
+const USPS = require('../').default;
+const test = require('ava');
 
 const usps = new USPS({
-  server: 'http://production.shippingapis.com/ShippingAPI.dll',
-  userId: process.env.USPS_USER_ID
+  userId: "325DAZSE5889",
 });
 
-test.cb('#cityStateLookup() should return the city when passed a zipcode', t => {
-  usps.cityStateLookup('98031', (err, address) => {
-    t.falsy(err);
-    t.is(address.city, 'KENT');
-    t.end();
-  });
+test('#cityStateLookup() should return the city when passed a zipcode', async t => {
+  const address = await usps.cityStateLookup('98031');
+  t.is(address.City, 'KENT');
 });
 
-test.cb('#cityStateLookup() should return the state when passed a zipcode', t => {
-  usps.cityStateLookup('98031', (err, address) => {
-    t.falsy(err);
-    t.is(address.state, 'WA');
-    t.end();
-  });
+test('#cityStateLookup() should return the state when passed a zipcode', async t => {
+  const address = await usps.cityStateLookup('98031');
+  t.is(address.State, 'WA');
 });
 
-test.cb('#cityStateLookup() should return an err when invalid zip', t => {
-  usps.cityStateLookup('23234324', err => {
-    t.truthy(err);
-    t.end();
-  });
+test('#cityStateLookup() should return an err when invalid zip', async t => {
+  const address = await usps.cityStateLookup('23234324')
+  t.truthy(address);
 });
