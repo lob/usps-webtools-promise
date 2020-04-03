@@ -1,32 +1,28 @@
 ### Installation:
 
 ``` sh
-npm install usps-webtools
+npm install usps-webtools-promise
 ```
 
 ### Usage:
 
-Initializing the usps model with usps server url address, and user id.
+Initializing the usps model with a user id.
 
 __Example:__
 
 ``` js
-const USPS = require('usps-webtools');
+const USPS = require('usps-webtools').default;
 
 const usps = new USPS({
-  server: 'http://production.shippingapis.com/ShippingAPI.dll',
   userId: 'USPS User id',
-  ttl: 10000 //TTL in milliseconds for request
 });
 ```
 
-### verify(object, callback)
+### verify(object)
 
-Verify takes two parameters: object and callback.
+Verify takes one parameter: object
 
 object: street1, street2, city, state, zip
-
-callback: err, address
 
 __Example__
 
@@ -37,44 +33,41 @@ usps.verify({
   city: 'San Francisco',
   state: 'CA',
   zip: '94103'
-}, function(err, address) {
+}).then(address => {
   console.log(address);
 });
 ```
 
-### zipCodeLookup(object, callback)
+### zipCodeLookup(object)
 
-zipCodeLookup takes two parameters: object and callback.
+zipCodeLookup takes one parameter: object.
 
 object: street1, street2, city, state
-
-callback: err, address
 
 __Example__
 
 ``` js
-usps.zipCodeLookup({
+const address = await usps.zipCodeLookup({
   street1: '322 3rd st.',
   street2: 'Apt 2',
   city: 'San Francisco',
   state: 'CA'
-}, function(err, address) {
-  console.log(address);
+});
+
+console.log(address);
 });
 ```
 
-### cityStateLookup(object, callback)
+### cityStateLookup(object)
 
-cityStateLookup takes two parameters: zipcode and callback.
+cityStateLookup takes one parameter: zipcode.
 
-zipcode: 5 digit zipcode
-
-callback: err, address
+zipcode: 5 digit zipcode as a string
 
 __Example__
 
 ``` js
-usps.cityStateLookup('94107', function(err, result) {
-  // result == { city: , state: , zip: }
+const result = await usps.cityStateLookup('94107');
+console.log(result);
 });
 ```
