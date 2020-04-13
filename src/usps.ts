@@ -294,21 +294,42 @@ async function callUSPS(
   return specificResult;
 }
 
-function returnAddress(Address: any, propercase: boolean) {
-  // Switch line 1 and 2
-  if (Address.Address2 || Address.Address1) {
-    const line2 = Address.Address2;
-    Address.Address2 = Address.Address1;
-    Address.Address1 = line2;
-  }
+const renameKeys = (keysMap: any, object: any): Address =>
+  Object.keys(object).reduce(
+    (accumulator, key) => ({
+      ...accumulator,
+      ...{ [keysMap[key] || key]: object[key] },
+    }),
+    {}
+  );
+
+const returnAddress = (
+  Address:
+    | AddressValidateResponse
+    | ZipCodeLookupResponse
+    | CityStateLookupResponse
+    | RateV4Response
+    | ErrorResponse
+    | Error
+    | USPSError,
+  propercase: boolean
+): Address => {
+  const keysMap = {
+    Address1: "street2",
+    Address2: "street1",
+    City: "city",
+    State: "state",
+    Zip5: "zip",
+  };
+  const newAddress: Address = renameKeys(keysMap, Address);
 
   if (propercase) {
-    Address.Address1 = properCase(Address.Address1 as string);
-    Address.Address2 = properCase(Address.Address2 as string);
-    Address.City = properCase(Address.City as string);
+    newAddress.street1 = properCase(newAddress.street1 as string);
+    newAddress.street2 = properCase(newAddress.street2 as string);
+    newAddress.city = properCase(newAddress.city as string);
   }
-  return Address;
-}
+  return newAddress;
+};
 
 export default class {
   #config: Config;
