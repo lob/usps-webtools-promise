@@ -1,33 +1,181 @@
 import { RequestOptions } from "https";
 import { stringify } from "querystring";
 import { create } from "xmlbuilder2";
-import {
-  AddressValidateRequest,
-  AddressValidateResponse,
-  CityStateLookupRequest,
-  CityStateLookupResponse,
-  ZipCodeLookupRequest,
-  ZipCodeLookupResponse,
-  ErrorResponse,
-  RateV4Request,
-  RateV4Response,
-} from "../types/usps";
 import USPSError from "./error";
 import request from "./request";
 import properCase from "./proper-case";
 
-interface AddressInput {
-  firm_name?: string;
-  street1?: string;
-  street2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
-  zip4?: string;
-  urbanization?: string;
+export interface AddressValidateRequest {
+  Revision: number;
+  Address: {
+    FirmName?: string;
+    Address1?: string;
+    Address2?: string;
+    City?: string;
+    State?: string;
+    Urbanization?: string;
+    Zip5?: string;
+    Zip4?: string;
+  };
 }
 
-interface PricingRateInput {
+export interface AddressValidateResponse {
+  FirmName?: string;
+  Address1?: string;
+  Address2?: string;
+  Address2Abbreviation?: string;
+  City?: string;
+  CityAbbreviation?: string;
+  State?: string;
+  Urbanization?: string;
+  Zip5?: string;
+  Zip4?: string;
+  DeliveryPoint?: string;
+  CarrierRoute?: string;
+  Footnotes?: string;
+  DPVConfirmation?: string;
+  DPVCMRA?: string;
+  DPVFootnotes?: string;
+  Business?: string;
+  CentralDeliveryPoint?: string;
+  Vacant?: string;
+}
+
+export interface ZipCodeLookupRequest {
+  Address: {
+    FirmName?: string;
+    Address1?: string;
+    Address2?: string;
+    City?: string;
+    State?: string;
+    Zip5?: string;
+    Zip4?: string;
+  };
+}
+
+export interface ZipCodeLookupResponse {
+  Address: {
+    FirmName?: string;
+    Address1?: string;
+    Address2?: string;
+    City?: string;
+    State?: string;
+    Urbanization?: string;
+    Zip5?: string;
+    Zip4?: string;
+  };
+}
+
+export interface CityStateLookupRequest {
+  ZipCode: {
+    Zip5: string;
+  };
+}
+
+export interface CityStateLookupResponse {
+  ZipCode: {
+    Zip5: string;
+    City: string;
+    State: string;
+  };
+}
+
+export interface ErrorResponse {
+  Error: {
+    Number: string;
+    Source: string;
+    Description: string;
+    HelpFile: string;
+    HelpContext: string;
+  };
+}
+
+export interface RateV4Request {
+  Package: {
+    // @ID is a special tag for xmlbuilder
+    "@ID": string;
+    Service: string;
+    FirstClassMailType?: string;
+    ZipOrigination: string;
+    ZipDestination: string;
+    Pounds: string;
+    Ounces: string;
+    Container: string;
+    Width?: string;
+    Length?: string;
+    Height?: string;
+    Girth?: string;
+    Value?: string;
+    AmountToCollect?: string;
+    SpecialServices?: {
+      SpecialService?: string;
+    };
+    Content?: {
+      ContentType?: string;
+      ContentDescription?: string;
+    };
+    GroundOnly?: boolean;
+    SortBy?: string;
+    Machinable?: string;
+    ReturnLocations?: boolean;
+    ReturnServiceInfo?: boolean;
+    DropOffTime?: string;
+    ShipDate?: {
+      Option?: string;
+    };
+    ReturnDimensionalWeight?: boolean;
+    TrackingRetentionPeriod?: string;
+  };
+}
+export interface RateV4Response {
+  Package: {
+    ZipOrigination: string;
+    ZipDestination: string;
+    Pounds: number;
+    Ounces: number;
+    FirstClassMailType?: string;
+    Container?: string;
+    Width?: string;
+    Length?: string;
+    Height?: string;
+    Girth?: string;
+    Machinable?: string;
+    Zone?: string;
+    Postage: {
+      CLASSID?: string;
+      MailService?: string;
+      Rate?: string;
+      CommercialRate?: string;
+      CommercialPlusRate?: string;
+      MaxDimensions?: string;
+      ServiceInformation?: string;
+      SpecialServices?: [
+        {
+          SpecialService?: {
+            ServiceID?: string;
+            ServiceName?: string;
+            Available?: string;
+            AvailableOnline?: string;
+            AvailableCPP?: string;
+            Price?: string;
+            PriceOnline?: string;
+            PriceCPP?: string;
+            DeclaredValueRequired?: string;
+            DueSenderRequired?: string;
+          };
+        }
+      ];
+      DimensionalWeightRate?: string;
+      DimensionalWeightCommercialPlusRate?: string;
+    };
+    Restriction: {
+      Restrictions?: string;
+    };
+    Error?: string;
+  };
+}
+
+export interface PricingRateInput {
   Service?: string;
   ZipOrigination?: string;
   ZipDestination?: string;
@@ -42,9 +190,20 @@ interface PricingRateInput {
   Machinable?: string;
 }
 
-interface Config {
+export interface Config {
   userId: string;
   properCase: boolean;
+}
+
+export interface Address {
+  firm_name?: string;
+  street1?: string;
+  street2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  zip4?: string;
+  urbanization?: string;
 }
 
 /**
@@ -174,7 +333,7 @@ export default class {
     @param {String} address.zip Zipcode
     @returns {Object} instance of module
   */
-  async verify(address: AddressInput) {
+  async verify(address: Address): Promise<Address | USPSError> {
     const parameters: AddressValidateRequest = {
       Revision: 1,
       Address: {
@@ -218,7 +377,7 @@ export default class {
     @param {String} address.zip Zipcode
     @returns {Object} instance of module
   */
-  async zipCodeLookup(address: AddressInput) {
+  async zipCodeLookup(address: Address) {
     const parameters: ZipCodeLookupRequest = {
       Address: {
         Address1: address.street2 || "",
