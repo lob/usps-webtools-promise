@@ -79,9 +79,9 @@ const returnAddress = (Address, propercase) => {
     };
     const newAddress = renameKeys(keysMap, Address);
     if (propercase) {
-        newAddress.street1 = proper_case_1.default(newAddress.street1);
-        newAddress.street2 = proper_case_1.default(newAddress.street2);
-        newAddress.city = proper_case_1.default(newAddress.city);
+        newAddress.street1 = proper_case_1.default(newAddress.street1 ? newAddress.street1 : "");
+        newAddress.street2 = proper_case_1.default(newAddress.street2 ? newAddress.street2 : "");
+        newAddress.city = proper_case_1.default(newAddress.city ? newAddress.city : "");
     }
     return newAddress;
 };

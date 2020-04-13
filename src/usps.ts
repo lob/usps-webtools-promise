@@ -324,9 +324,13 @@ const returnAddress = (
   const newAddress: Address = renameKeys(keysMap, Address);
 
   if (propercase) {
-    newAddress.street1 = properCase(newAddress.street1 as string);
-    newAddress.street2 = properCase(newAddress.street2 as string);
-    newAddress.city = properCase(newAddress.city as string);
+    newAddress.street1 = properCase(
+      newAddress.street1 ? newAddress.street1 : ""
+    );
+    newAddress.street2 = properCase(
+      newAddress.street2 ? newAddress.street2 : ""
+    );
+    newAddress.city = properCase(newAddress.city ? newAddress.city : "");
   }
   return newAddress;
 };
