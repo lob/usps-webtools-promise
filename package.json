@@ -2,8 +2,9 @@
   "name": "usps-webtools-promise",
   "author": "Kyle McNally <kyle@kmcnally.net>",
   "description": "API wrapper for the USPS Web-Tools, with Promises!",
-  "version": "2.1.0",
+  "version": "2.1.2",
   "main": "./dist/usps.js",
+  "types": "./dist/usps.d.ts",
   "contributors": [
     {
       "name": "Sherod Taylor",
@@ -59,6 +60,5 @@
   "engines": {
     "node": ">=10.x"
   },
-  "license": "MIT",
-  "types": "dist/usps.d.ts"
+  "license": "MIT"
 }
