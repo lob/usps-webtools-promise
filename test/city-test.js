@@ -7,12 +7,12 @@ const usps = new USPS({
 
 test('#cityStateLookup() should return the city when passed a zipcode', async t => {
   const address = await usps.cityStateLookup('98031');
-  t.is(address.City, 'KENT');
+  t.is(address.city, 'KENT');
 });
 
 test('#cityStateLookup() should return the state when passed a zipcode', async t => {
   const address = await usps.cityStateLookup('98031');
-  t.is(address.State, 'WA');
+  t.is(address.state, 'WA');
 });
 
 test('#cityStateLookup() should return an err when invalid zip', async t => {

@@ -13,7 +13,7 @@ test('Address verify should validate apartment', async t => {
     state: 'WA',
     zip: '98031'
   });
-  t.is(address.Address2, 'APT 2');
+  t.is(address.street2, 'APT 2');
 });
 
 test('Address verify should validate Unit', async t => {
@@ -24,7 +24,7 @@ test('Address verify should validate Unit', async t => {
     state: 'WA',
     zip: '98031'
   });
-  t.is(address.Address2, 'UNIT 2');
+  t.is(address.street2, 'UNIT 2');
 });
 
 test('Address verify should validate Building', async t => {
@@ -35,7 +35,7 @@ test('Address verify should validate Building', async t => {
     state: 'WA',
     zip: '98031'
   });
-  t.is(address.Address2, 'BLDG 2');
+  t.is(address.street2, 'BLDG 2');
 });
 
 test('Address verify should validate Floor', async t => {
@@ -46,5 +46,5 @@ test('Address verify should validate Floor', async t => {
     state: 'WA',
     zip: '98031'
   });
-  t.is(address.Address2, 'FL 2');
+  t.is(address.street2, 'FL 2');
 });

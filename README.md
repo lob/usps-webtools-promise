@@ -1,6 +1,6 @@
 ### About:
 
-This package was forked from [MadisonReed/usps-webtools](https://github.com/MadisonReed/usps-webtools), but it has been modernized with Typescript and Promises (async/await). Note: The output differs between this package and MadisonReed/usps-webtools.
+This package was forked from [MadisonReed/usps-webtools](https://github.com/MadisonReed/usps-webtools), but it has been modernized with Typescript and Promises (async/await). Note: This is a drop-in replacement for MadisonReed/usps-webtools, it produces the same output.
 
 ### Installation:
 
@@ -16,11 +16,13 @@ __Example:__
 
 ``` js
 const USPS = require('usps-webtools-promise').default;
+// or
+import USPS from "usps-webtools-promise";
 
 const usps = new USPS({
   // This can be created by going to https://www.usps.com/business/web-tools-apis/ and registering for an id
   userId: 'USPS User id',
-  // USPS returns ALL CAPS, this boolean turns on Proper Caps for both Address lines and City. This is an optional item.
+  // USPS returns ALL CAPS, this boolean turns on Proper Caps for both Street lines and City. This is an optional item.
   properCase: boolean
 });
 ```

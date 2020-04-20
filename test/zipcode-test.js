@@ -14,7 +14,7 @@ test('Zipcode Lookup should return the address with zip', async t => {
     city: 'Oakland',
     state: 'CA'
   });
-  t.is(address.Zip5, ZIP);
+  t.is(address.zip, ZIP);
 });
 
 test('Zipcode Lookup should error if address is invalid', async t => {
