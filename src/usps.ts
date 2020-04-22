@@ -195,7 +195,7 @@ export interface Config {
   properCase: boolean;
 }
 
-export interface Address {
+export interface AddressRequest {
   firm_name?: string;
   street1?: string;
   street2?: string;
@@ -203,6 +203,18 @@ export interface Address {
   state?: string;
   zip?: string;
   zip4?: string;
+  urbanization?: string;
+}
+
+export interface AddressResponse {
+  firm_name?: string;
+  street1?: string;
+  street2?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  Zip4?: string;
+  Zip5?: string;
   urbanization?: string;
 }
 
@@ -294,7 +306,7 @@ async function callUSPS(
   return specificResult;
 }
 
-const renameKeys = (keysMap: any, object: any): Address =>
+const renameKeys = (keysMap: any, object: any): AddressResponse =>
   Object.keys(object).reduce(
     (accumulator, key) => ({
       ...accumulator,
@@ -313,15 +325,37 @@ const returnAddress = (
     | Error
     | USPSError,
   propercase: boolean
-): Address => {
+): AddressResponse => {
   const keysMap = {
     Address1: "street2",
     Address2: "street1",
     City: "city",
     State: "state",
-    Zip5: "zip",
+    FirmName: "firm_name",
+    Address2Abbreviation: "address2_abbreviation",
+    CityAbbreviation: "city_abbreviation",
+    Urbanization: "urbanization",
+    DeliveryPoint: "delivery_point",
+    CarrierRoute: "carrier_route",
+    Footnotes: "footnotes",
+    DPVConfirmation: "dpv_confirmation",
+    DPVCMRA: "dpvcmra",
+    DPVFalse: "dpv_false",
+    DPVFootnotes: "dpv_footnotes",
+    Business: "business",
+    CentralDeliveryPoint: "central_delivery_point",
+    Vacant: "vacant",
   };
-  const newAddress: Address = renameKeys(keysMap, Address);
+  const newAddress: AddressResponse = renameKeys(keysMap, Address);
+
+  if (typeof newAddress.Zip4 === "object") {
+    // If Zip4 is not found, USPS returns a {}, change it to a blank string
+    newAddress.Zip4 = "";
+    newAddress.zip = newAddress.Zip5;
+  } else {
+    // Combine the zip5 and zip4 into zip
+    newAddress.zip = `${newAddress.Zip5}-${newAddress.Zip4}`;
+  }
 
   if (propercase) {
     newAddress.street1 = properCase(
@@ -358,7 +392,7 @@ export default class {
     @param {String} address.zip Zipcode
     @returns {Object} instance of module
   */
-  async verify(address: Address): Promise<Address | USPSError> {
+  async verify(address: AddressRequest): Promise<AddressResponse | USPSError> {
     const parameters: AddressValidateRequest = {
       Revision: 1,
       Address: {
@@ -402,7 +436,7 @@ export default class {
     @param {String} address.zip Zipcode
     @returns {Object} instance of module
   */
-  async zipCodeLookup(address: Address) {
+  async zipCodeLookup(address: AddressRequest) {
     const parameters: ZipCodeLookupRequest = {
       Address: {
         Address1: address.street2 || "",
