@@ -176,7 +176,7 @@ export interface Config {
     userId: string;
     properCase: boolean;
 }
-export interface Address {
+export interface AddressRequest {
     firm_name?: string;
     street1?: string;
     street2?: string;
@@ -186,11 +186,22 @@ export interface Address {
     zip4?: string;
     urbanization?: string;
 }
+export interface AddressResponse {
+    firm_name?: string;
+    street1?: string;
+    street2?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    Zip4?: string;
+    Zip5?: string;
+    urbanization?: string;
+}
 export default class {
     #private;
     constructor(config: Config);
-    verify(address: Address): Promise<Address | USPSError>;
-    zipCodeLookup(address: Address): Promise<USPSError | Address>;
+    verify(address: AddressRequest): Promise<AddressResponse | USPSError>;
+    zipCodeLookup(address: AddressRequest): Promise<USPSError | AddressResponse>;
     pricingRateV4(pricingRate: PricingRateInput): Promise<USPSError | {
         CLASSID?: string | undefined;
         MailService?: string | undefined;
@@ -216,5 +227,5 @@ export default class {
         DimensionalWeightRate?: string | undefined;
         DimensionalWeightCommercialPlusRate?: string | undefined;
     }>;
-    cityStateLookup(zip: string): Promise<USPSError | Address>;
+    cityStateLookup(zip: string): Promise<USPSError | AddressResponse>;
 }

@@ -75,9 +75,29 @@ const returnAddress = (Address, propercase) => {
         Address2: "street1",
         City: "city",
         State: "state",
-        Zip5: "zip",
+        FirmName: 'firm_name',
+        Address2Abbreviation: 'address2_abbreviation',
+        CityAbbreviation: 'city_abbreviation',
+        Urbanization: 'urbanization',
+        DeliveryPoint: 'delivery_point',
+        CarrierRoute: 'carrier_route',
+        Footnotes: 'footnotes',
+        DPVConfirmation: 'dpv_confirmation',
+        DPVCMRA: 'dpvcmra',
+        DPVFalse: 'dpv_false',
+        DPVFootnotes: 'dpv_footnotes',
+        Business: 'business',
+        CentralDeliveryPoint: 'central_delivery_point',
+        Vacant: 'vacant'
     };
     const newAddress = renameKeys(keysMap, Address);
+    if (typeof newAddress.Zip4 === "object") {
+        newAddress.Zip4 = "";
+        newAddress.zip = newAddress.Zip5;
+    }
+    else {
+        newAddress.zip = `${newAddress.Zip5}-${newAddress.Zip4}`;
+    }
     if (propercase) {
         newAddress.street1 = proper_case_1.default(newAddress.street1 ? newAddress.street1 : "");
         newAddress.street2 = proper_case_1.default(newAddress.street2 ? newAddress.street2 : "");
