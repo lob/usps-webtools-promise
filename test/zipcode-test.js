@@ -1,8 +1,14 @@
 const USPS = require('../').default;
 const test = require('ava');
 
+// Load .env
+if (process.env.NODE_ENV !== "production") {
+  // eslint-disable-next-line global-require
+  require("dotenv").config({ path: "test/.env" });
+}
+
 const usps = new USPS({
-  userId: "325DAZSE5889"
+  userId: process.env.USPS_ID
 });
 
 const ZIP = "94607";
