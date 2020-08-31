@@ -34,16 +34,14 @@
     "standardization"
   ],
   "dependencies": {
-    "lodash.merge": "^4.6.2",
-    "xmlbuilder2": "^2.1.2"
+    "xmlbuilder2": "^2.3.1"
   },
   "devDependencies": {
     "@sparticuz/eslint-config": "^3.3.0",
-    "@types/lodash.merge": "^4.6.6",
-    "@types/node": "^13.13.2",
-    "ava": "^3.7.1",
+    "@types/node": "^14.6.2",
     "@typescript-eslint/eslint-plugin": "^4.0.0",
     "@typescript-eslint/parser": "^4.0.0",
+    "ava": "^3.12.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.7.0",
     "nyc": "^15.1.0",
