@@ -1,7 +1,6 @@
 import { RequestOptions } from "https";
 import { stringify } from "querystring";
 import { create } from "xmlbuilder2";
-import USPSError from "./error";
 import request from "./request";
 import properCase from "./proper-case";
 
@@ -267,18 +266,12 @@ async function callUSPS(
   try {
     uspsResponse = await request(options);
   } catch (error) {
-    return new USPSError(error.message, error, {
-      method: api,
-      during: "request",
-    });
+    return new Error(error);
   }
 
   // may have a root-level error
   if (uspsResponse.Error) {
-    return new USPSError(
-      uspsResponse.Error.Description.trim(),
-      uspsResponse.Error
-    );
+    return new Error(uspsResponse.Error);
   }
 
   /**
@@ -297,10 +290,7 @@ async function callUSPS(
 
   // specific error handling
   if (specificResult.Error) {
-    return new USPSError(
-      specificResult.Error.Description.trim(),
-      specificResult.Error
-    );
+    return new Error(specificResult.Error);
   }
 
   return specificResult;
@@ -322,8 +312,7 @@ const returnAddress = (
     | CityStateLookupResponse
     | RateV4Response
     | ErrorResponse
-    | Error
-    | USPSError,
+    | Error,
   propercase: boolean
 ): AddressResponse => {
   const keysMap = {
@@ -374,7 +363,7 @@ export default class {
 
   constructor(config: Config) {
     if (!(config && config.userId)) {
-      throw new USPSError("Must pass USPS userId");
+      throw new Error("Must pass USPS userId");
     }
     this.#config = {
       ...config,
@@ -392,7 +381,7 @@ export default class {
     @param {String} address.zip Zipcode
     @returns {Object} instance of module
   */
-  async verify(address: AddressRequest): Promise<AddressResponse | USPSError> {
+  async verify(address: AddressRequest): Promise<AddressResponse | Error> {
     const parameters: AddressValidateRequest = {
       Revision: 1,
       Address: {
@@ -421,7 +410,7 @@ export default class {
       )) as AddressValidateResponse;
       return returnAddress(response, this.#config.properCase);
     } catch (error) {
-      return new USPSError(error);
+      return new Error(error);
     }
   }
 
@@ -457,7 +446,7 @@ export default class {
       )) as ZipCodeLookupResponse["Address"];
       return returnAddress(response, this.#config.properCase);
     } catch (error) {
-      return new USPSError(error);
+      return new Error(error);
     }
   }
 
@@ -496,7 +485,7 @@ export default class {
       )) as RateV4Response["Package"];
       return response.Postage;
     } catch (error) {
-      return new USPSError(error);
+      return new Error(error);
     }
   }
 
@@ -524,7 +513,7 @@ export default class {
       )) as CityStateLookupResponse["ZipCode"];
       return returnAddress(response, this.#config.properCase);
     } catch (error) {
-      return new USPSError(error);
+      return new Error(error);
     }
   }
 }
