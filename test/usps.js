@@ -1,16 +1,16 @@
-const USPS = require('../').default;
-const test = require('ava');
+const test = require("ava");
+const USPS = require("..").default;
 
-test('USPS should throw an exception when constructor is called without config object', t => {
+test("USPS should throw an exception when constructor is called without config object", (t) => {
   t.throws(() => {
-    new USPS();
+    USPS();
   });
 });
 
-test('USPS should throw an exception when constructor is called without config.userId', t => {
+test("USPS should throw an exception when constructor is called without config.userId", (t) => {
   t.throws(() => {
-    new USPS({
-      server: '234DSG'
+    USPS({
+      server: "234DSG",
     });
   });
 });

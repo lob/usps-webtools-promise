@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { RequestOptions } from "https";
 import { stringify } from "querystring";
 import { create } from "xmlbuilder2";
@@ -5,63 +6,63 @@ import request from "./request";
 import properCase from "./proper-case";
 
 export interface AddressValidateRequest {
-  Revision: number;
   Address: {
-    FirmName?: string;
     Address1?: string;
     Address2?: string;
     City?: string;
+    FirmName?: string;
     State?: string;
     Urbanization?: string;
-    Zip5?: string;
     Zip4?: string;
+    Zip5?: string;
   };
+  Revision: number;
 }
 
 export interface AddressValidateResponse {
-  FirmName?: string;
   Address1?: string;
   Address2?: string;
   Address2Abbreviation?: string;
+  Business?: string;
+  CarrierRoute?: string;
+  CentralDeliveryPoint?: string;
   City?: string;
   CityAbbreviation?: string;
+  DPVCMRA?: string;
+  DPVConfirmation?: string;
+  DPVFootnotes?: string;
+  DeliveryPoint?: string;
+  FirmName?: string;
+  Footnotes?: string;
   State?: string;
   Urbanization?: string;
-  Zip5?: string;
-  Zip4?: string;
-  DeliveryPoint?: string;
-  CarrierRoute?: string;
-  Footnotes?: string;
-  DPVConfirmation?: string;
-  DPVCMRA?: string;
-  DPVFootnotes?: string;
-  Business?: string;
-  CentralDeliveryPoint?: string;
   Vacant?: string;
+  Zip4?: string;
+  Zip5?: string;
 }
 
 export interface ZipCodeLookupRequest {
   Address: {
-    FirmName?: string;
     Address1?: string;
     Address2?: string;
     City?: string;
+    FirmName?: string;
     State?: string;
-    Zip5?: string;
     Zip4?: string;
+    Zip5?: string;
   };
 }
 
 export interface ZipCodeLookupResponse {
   Address: {
-    FirmName?: string;
     Address1?: string;
     Address2?: string;
     City?: string;
+    FirmName?: string;
     State?: string;
     Urbanization?: string;
-    Zip5?: string;
     Zip4?: string;
+    Zip5?: string;
   };
 }
 
@@ -73,19 +74,19 @@ export interface CityStateLookupRequest {
 
 export interface CityStateLookupResponse {
   ZipCode: {
-    Zip5: string;
     City: string;
     State: string;
+    Zip5: string;
   };
 }
 
 export interface ErrorResponse {
   Error: {
+    Description: string;
+    HelpContext: string;
+    HelpFile: string;
     Number: string;
     Source: string;
-    Description: string;
-    HelpFile: string;
-    HelpContext: string;
   };
 }
 
@@ -93,128 +94,129 @@ export interface RateV4Request {
   Package: {
     // @ID is a special tag for xmlbuilder
     "@ID": string;
-    Service: string;
-    FirstClassMailType?: string;
-    ZipOrigination: string;
-    ZipDestination: string;
-    Pounds: string;
-    Ounces: string;
-    Container: string;
-    Width?: string;
-    Length?: string;
-    Height?: string;
-    Girth?: string;
-    Value?: string;
     AmountToCollect?: string;
-    SpecialServices?: {
-      SpecialService?: string;
-    };
+    Container: string;
     Content?: {
-      ContentType?: string;
       ContentDescription?: string;
+      ContentType?: string;
     };
+    DropOffTime?: string;
+    FirstClassMailType?: string;
+    Girth?: string;
     GroundOnly?: boolean;
-    SortBy?: string;
+    Height?: string;
+    Length?: string;
     Machinable?: string;
+    Ounces: string;
+    Pounds: string;
+    ReturnDimensionalWeight?: boolean;
     ReturnLocations?: boolean;
     ReturnServiceInfo?: boolean;
-    DropOffTime?: string;
+    Service: string;
     ShipDate?: {
       Option?: string;
     };
-    ReturnDimensionalWeight?: boolean;
+    SortBy?: string;
+    SpecialServices?: {
+      SpecialService?: string;
+    };
     TrackingRetentionPeriod?: string;
+    Value?: string;
+    Width?: string;
+    ZipDestination: string;
+    ZipOrigination: string;
   };
 }
 export interface RateV4Response {
   Package: {
-    ZipOrigination: string;
-    ZipDestination: string;
-    Pounds: number;
-    Ounces: number;
-    FirstClassMailType?: string;
     Container?: string;
-    Width?: string;
-    Length?: string;
-    Height?: string;
+    Error?: string;
+    FirstClassMailType?: string;
     Girth?: string;
+    Height?: string;
+    Length?: string;
     Machinable?: string;
-    Zone?: string;
+    Ounces: number;
     Postage: {
       CLASSID?: string;
-      MailService?: string;
-      Rate?: string;
-      CommercialRate?: string;
       CommercialPlusRate?: string;
+      CommercialRate?: string;
+      DimensionalWeightCommercialPlusRate?: string;
+      DimensionalWeightRate?: string;
+      MailService?: string;
       MaxDimensions?: string;
+      Rate?: string;
       ServiceInformation?: string;
       SpecialServices?: [
         {
           SpecialService?: {
-            ServiceID?: string;
-            ServiceName?: string;
             Available?: string;
-            AvailableOnline?: string;
             AvailableCPP?: string;
-            Price?: string;
-            PriceOnline?: string;
-            PriceCPP?: string;
+            AvailableOnline?: string;
             DeclaredValueRequired?: string;
             DueSenderRequired?: string;
+            Price?: string;
+            PriceCPP?: string;
+            PriceOnline?: string;
+            ServiceID?: string;
+            ServiceName?: string;
           };
         }
       ];
-      DimensionalWeightRate?: string;
-      DimensionalWeightCommercialPlusRate?: string;
     };
+    Pounds: number;
     Restriction: {
       Restrictions?: string;
     };
-    Error?: string;
+    Width?: string;
+    ZipDestination: string;
+    ZipOrigination: string;
+    Zone?: string;
   };
 }
 
 export interface PricingRateInput {
-  Service?: string;
-  ZipOrigination?: string;
-  ZipDestination?: string;
-  Pounds?: string;
-  Ounces?: string;
   Container?: string;
+  Girth?: string;
+  Height?: string;
+  Length?: string;
+  Machinable?: string;
+  Ounces?: string;
+  Pounds?: string;
+  Service?: string;
   Size?: string;
   Width?: string;
-  Length?: string;
-  Height?: string;
-  Girth?: string;
-  Machinable?: string;
+  ZipDestination?: string;
+  ZipOrigination?: string;
 }
 
 export interface Config {
-  userId: string;
   properCase: boolean;
+  staging: boolean;
+  userId: string;
 }
 
 export interface AddressRequest {
+  city?: string;
   firm_name?: string;
+  state?: string;
   street1?: string;
   street2?: string;
-  city?: string;
-  state?: string;
+  urbanization?: string;
   zip?: string;
   zip4?: string;
-  urbanization?: string;
 }
 
 export interface AddressResponse {
-  firm_name?: string;
-  street1?: string;
-  street2?: string;
-  city?: string;
-  state?: string;
-  zip?: string;
   Zip4?: string;
   Zip5?: string;
+  city?: string;
+  firm_name?: string;
+  state?: string;
+  street1?: string;
+  street2?: string;
   urbanization?: string;
+  zip?: string;
 }
 
 /**
@@ -318,21 +320,21 @@ const returnAddress = (
   const keysMap = {
     Address1: "street2",
     Address2: "street1",
-    City: "city",
-    State: "state",
-    FirmName: "firm_name",
     Address2Abbreviation: "address2_abbreviation",
-    CityAbbreviation: "city_abbreviation",
-    Urbanization: "urbanization",
-    DeliveryPoint: "delivery_point",
+    Business: "business",
     CarrierRoute: "carrier_route",
-    Footnotes: "footnotes",
-    DPVConfirmation: "dpv_confirmation",
+    CentralDeliveryPoint: "central_delivery_point",
+    City: "city",
+    CityAbbreviation: "city_abbreviation",
     DPVCMRA: "dpvcmra",
+    DPVConfirmation: "dpv_confirmation",
     DPVFalse: "dpv_false",
     DPVFootnotes: "dpv_footnotes",
-    Business: "business",
-    CentralDeliveryPoint: "central_delivery_point",
+    DeliveryPoint: "delivery_point",
+    FirmName: "firm_name",
+    Footnotes: "footnotes",
+    State: "state",
+    Urbanization: "urbanization",
     Vacant: "vacant",
   };
   const newAddress: AddressResponse = renameKeys(keysMap, Address);
@@ -383,16 +385,16 @@ export default class {
   */
   async verify(address: AddressRequest): Promise<AddressResponse | Error> {
     const parameters: AddressValidateRequest = {
-      Revision: 1,
       Address: {
-        FirmName: address.firm_name,
         Address1: address.street2 || "",
         Address2: address.street1,
         City: address.city,
+        FirmName: address.firm_name,
         State: address.state,
-        Zip5: address.zip,
         Zip4: address.zip4 || "",
+        Zip5: address.zip,
       },
+      Revision: 1,
     };
 
     if (address.urbanization) {
@@ -460,17 +462,17 @@ export default class {
     const parameters: RateV4Request = {
       Package: {
         "@ID": "1ST",
-        Service: pricingRate.Service || "PRIORITY",
-        ZipOrigination: pricingRate.ZipOrigination || "55401",
-        ZipDestination: pricingRate.ZipDestination || "",
-        Pounds: pricingRate.Pounds || "",
-        Ounces: pricingRate.Ounces || "",
         Container: pricingRate.Container || "",
-        Width: pricingRate.Width,
-        Length: pricingRate.Length,
-        Height: pricingRate.Height,
         Girth: pricingRate.Girth,
+        Height: pricingRate.Height,
+        Length: pricingRate.Length,
         Machinable: pricingRate.Machinable,
+        Ounces: pricingRate.Ounces || "",
+        Pounds: pricingRate.Pounds || "",
+        Service: pricingRate.Service || "PRIORITY",
+        Width: pricingRate.Width,
+        ZipDestination: pricingRate.ZipDestination || "",
+        ZipOrigination: pricingRate.ZipOrigination || "55401",
       },
     };
 
