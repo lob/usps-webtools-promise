@@ -12,8 +12,8 @@ export interface ErrorResponse {
 }
 
 export interface Config {
-  properCase: boolean;
-  staging: boolean;
+  properCase?: boolean;
+  staging?: boolean;
   userId: string;
 }
 
