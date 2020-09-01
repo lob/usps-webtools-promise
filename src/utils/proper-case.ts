@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable security/detect-non-literal-regexp */
 export default (value: string): string => {
   let string = value.replace(/([^\W_]+[^\s-]*) */g, (txt) => {
     return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
