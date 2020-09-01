@@ -4,4 +4,5 @@ src
 test
 .editorconfig
 .eslintignore
+.eslintrc.json
 .gitignore
