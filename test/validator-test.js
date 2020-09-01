@@ -1,6 +1,6 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 const test = require("ava");
-const USPS = require("..").default;
+const USPS = require("../dist/usps").default;
 
 // Load .env
 if (process.env.NODE_ENV !== "production") {
@@ -9,51 +9,49 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const usps = new USPS({
-  staging: true,
   userId: process.env.USPS_ID,
 });
 
 test("Address verify should validate apartment", async (t) => {
   const address = await usps.verify({
-    city: "Kent",
-    state: "WA",
-    street1: "11205 SE 233RD PL.",
-    street2: "Apartment 2",
-    zip: "98031",
+    Address1: "11205 SE 233RD PL.",
+    Address2: "Apartment 2",
+    City: "Kent",
+    State: "WA",
+    Zip5: "98031",
   });
-  t.is(address.street2, "APT 2");
+  t.is(address.Address2, "APT 2");
 });
 
 test("Address verify should validate Unit", async (t) => {
   const address = await usps.verify({
-    city: "Kent",
-    state: "WA",
-    street1: "11205 SE 233RD PL.",
-    street2: "UNIT 2",
-    zip: "98031",
+    Address1: "11205 SE 233RD PL.",
+    Address2: "UNIT 2",
+    City: "Kent",
+    State: "WA",
+    Zip5: "98031",
   });
-  t.is(address.street2, "UNIT 2");
+  t.is(address.Address2, "UNIT 2");
 });
 
 test("Address verify should validate Building", async (t) => {
   const address = await usps.verify({
-    city: "Kent",
-    state: "WA",
-    street1: "11205 southeast 233Road PLace.",
-    street2: "Building 2",
-    zip: "98031",
+    Address1: "11205 southeast 233Road PLace.",
+    Address2: "Building 2",
+    City: "Kent",
+    State: "WA",
+    Zip5: "98031",
   });
-  console.log(address);
-  t.is(address.street2, "BLDG 2");
+  t.is(address.Address2, "BLDG 2");
 });
 
 test("Address verify should validate Floor", async (t) => {
   const address = await usps.verify({
-    city: "Kent",
-    state: "WA",
-    street1: "11205 SE 233RD PL.",
-    street2: "Floor 2",
-    zip: "98031",
+    Address1: "11205 SE 233RD PL.",
+    Address2: "Floor 2",
+    City: "Kent",
+    State: "WA",
+    Zip5: "98031",
   });
-  t.is(address.street2, "FL 2");
+  t.is(address.Address2, "FL 2");
 });

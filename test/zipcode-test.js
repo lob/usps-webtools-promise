@@ -1,5 +1,5 @@
 const test = require("ava");
-const USPS = require("..").default;
+const USPS = require("../dist/usps").default;
 
 // Load .env
 if (process.env.NODE_ENV !== "production") {
@@ -8,55 +8,53 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const usps = new USPS({
-  staging: true,
   userId: process.env.USPS_ID,
 });
 
-const ZIP = "94607";
-
 test("Zipcode Lookup should return the address with zip", async (t) => {
   const address = await usps.zipCodeLookup({
-    city: "Oakland",
-    state: "CA",
-    street1: "121 Embarcadero West",
-    street2: "Apt 2205",
+    Address1: "121 Embarcadero West",
+    Address2: "Apt 2205",
+    City: "Oakland",
+    State: "CA",
   });
-  t.is(address.zip, ZIP);
+  const zip = `${address.Zip5}-${address.Zip4}`;
+  t.is(zip, "94607-3785");
 });
 
 test("Zipcode Lookup should error if address is invalid", async (t) => {
-  const address = await usps.zipCodeLookup({
-    city: "Seattle",
-    state: "WA",
-    street1: "sdfisd",
-    street2: "Apt 2205",
+  const error = await usps.zipCodeLookup({
+    Address1: "sdfisd",
+    Address2: "Apt 2205",
+    City: "Seattle",
+    State: "WA",
   });
-  t.is(address.message, "Address Not Found.");
+  t.is(error.message, "Address Not Found.");
 });
 
 test("Zipcode Lookup should pass error to callback if street is missing", async (t) => {
-  const address = await usps.zipCodeLookup({
-    city: "Oakland",
-    state: "CA",
+  const error = await usps.zipCodeLookup({
+    City: "Oakland",
+    State: "CA",
   });
-  t.truthy(address);
+  t.is(error.message, "Address Not Found.");
 });
 
 test("Zipcode Lookup error should be passed to callback if city is missing", async (t) => {
-  const address = await usps.zipCodeLookup({
-    state: "CA",
-    street1: "121 Embarcadero West",
-    street2: "Apt 2205",
+  const error = await usps.zipCodeLookup({
+    Address1: "121 Embarcadero West",
+    Address2: "Apt 2205",
+    State: "CA",
   });
-  t.truthy(address);
+  t.is(error.message, "Invalid City.");
 });
 
 test("Zipcode Lookup should return an error if the address is fake", async (t) => {
-  const address = await usps.zipCodeLookup({
-    city: "kojs",
-    state: "LS",
-    street1: "453 sdfsdfa Road",
-    street2: "sdfadf",
+  const error = await usps.zipCodeLookup({
+    Address1: "453 sdfsdfa Road",
+    Address2: "sdfadf",
+    City: "kojs",
+    State: "LS",
   });
-  t.truthy(address);
+  t.is(error.message, "Invalid State Code.");
 });

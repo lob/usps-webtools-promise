@@ -1,5 +1,5 @@
 const test = require("ava");
-const USPS = require("..").default;
+const USPS = require("../dist/usps").default;
 
 // Load .env
 if (process.env.NODE_ENV !== "production") {
@@ -8,21 +8,20 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const usps = new USPS({
-  staging: true,
   userId: process.env.USPS_ID,
 });
 
 test("#cityStateLookup() should return the city when passed a zipcode", async (t) => {
   const address = await usps.cityStateLookup("98031");
-  t.is(address.city, "KENT");
+  t.is(address.City, "KENT");
 });
 
 test("#cityStateLookup() should return the state when passed a zipcode", async (t) => {
   const address = await usps.cityStateLookup("98031");
-  t.is(address.state, "WA");
+  t.is(address.State, "WA");
 });
 
 test("#cityStateLookup() should return an err when invalid zip", async (t) => {
-  const address = await usps.cityStateLookup("23234324");
-  t.truthy(address);
+  const error = await usps.cityStateLookup("23234324");
+  t.is(error.message, "ZIPCode must be 5 characters");
 });
