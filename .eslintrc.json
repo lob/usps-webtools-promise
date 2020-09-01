@@ -2,6 +2,7 @@
   "extends": [
     "@sparticuz/eslint-config"
   ],
+  "rules": {},
   "settings": {
     "node": {
       "allowModules": [
