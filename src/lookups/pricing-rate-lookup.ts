@@ -54,60 +54,64 @@ export interface RateV4Request {
     ZipOrigination: string;
   };
 }
+
+interface RateV4Postage {
+  CLASSID?: string;
+  CommercialPlusRate?: string;
+  CommercialRate?: string;
+  DimensionalWeightCommercialPlusRate?: string;
+  DimensionalWeightRate?: string;
+  MailService?: string;
+  MaxDimensions?: string;
+  Rate?: string;
+  ServiceInformation?: string;
+  SpecialServices?: [
+    {
+      SpecialService?: {
+        Available?: string;
+        AvailableCPP?: string;
+        AvailableOnline?: string;
+        DeclaredValueRequired?: string;
+        DueSenderRequired?: string;
+        Price?: string;
+        PriceCPP?: string;
+        PriceOnline?: string;
+        ServiceID?: string;
+        ServiceName?: string;
+      };
+    }
+  ];
+}
+
+interface RateV4Package {
+  Container?: string;
+  Error?: string;
+  FirstClassMailType?: string;
+  Girth?: string;
+  Height?: string;
+  Length?: string;
+  Machinable?: string;
+  Ounces: number;
+  Postage: RateV4Postage;
+  Pounds: number;
+  Restriction: {
+    Restrictions?: string;
+  };
+  Width?: string;
+  ZipDestination: string;
+  ZipOrigination: string;
+  Zone?: string;
+}
+
 export interface RateV4Response {
   Error?: ErrorResponse;
-  Package?: {
-    Container?: string;
-    Error?: string;
-    FirstClassMailType?: string;
-    Girth?: string;
-    Height?: string;
-    Length?: string;
-    Machinable?: string;
-    Ounces: number;
-    Postage: {
-      CLASSID?: string;
-      CommercialPlusRate?: string;
-      CommercialRate?: string;
-      DimensionalWeightCommercialPlusRate?: string;
-      DimensionalWeightRate?: string;
-      MailService?: string;
-      MaxDimensions?: string;
-      Rate?: string;
-      ServiceInformation?: string;
-      SpecialServices?: [
-        {
-          SpecialService?: {
-            Available?: string;
-            AvailableCPP?: string;
-            AvailableOnline?: string;
-            DeclaredValueRequired?: string;
-            DueSenderRequired?: string;
-            Price?: string;
-            PriceCPP?: string;
-            PriceOnline?: string;
-            ServiceID?: string;
-            ServiceName?: string;
-          };
-        }
-      ];
-    };
-    Pounds: number;
-    Restriction: {
-      Restrictions?: string;
-    };
-    Width?: string;
-    ZipDestination: string;
-    ZipOrigination: string;
-    Zone?: string;
-  };
+  Package?: RateV4Package;
 }
 
 export default async function (
   this: USPSClass,
   pricingRate: PricingRateInput
-  // @ts-expect-error I'm checking to see if Postage exists before returning
-): Promise<RateV4Response["Package"]["Postage"] | Error> {
+): Promise<RateV4Postage | Error> {
   const parameters: RateV4Request = {
     Package: {
       "@ID": "1ST",
@@ -125,7 +129,7 @@ export default async function (
     },
   };
 
-  let response: RateV4Response["Package"];
+  let response: RateV4Response;
   try {
     response = (await callUSPS(
       "RateV4",
@@ -133,9 +137,9 @@ export default async function (
       "Package",
       this.config,
       parameters
-    )) as RateV4Response["Package"];
-    if (response && response.Postage) {
-      return response.Postage;
+    )) as RateV4Response;
+    if (response && response.Package) {
+      return response.Package.Postage;
     }
     throw new Error("Can't find result");
   } catch (error) {
