@@ -2,7 +2,7 @@
 
 ### About:
 
-This package was forked from [MadisonReed/usps-webtools](https://github.com/MadisonReed/usps-webtools), but it has been modernized with Typescript and Promises (async/await). Note: This is a drop-in replacement for MadisonReed/usps-webtools, it produces the same output.
+This package was forked from [MadisonReed/usps-webtools](https://github.com/MadisonReed/usps-webtools), but it has been modernized with Typescript and Promises (async/await). Note: Version 2 is a drop-in replacement for MadisonReed/usps-webtools, it produces the same output. Version 3 uses the same output from USPS, with the exception of Address1 and Address2 being switched, per social norms.
 
 ### Installation:
 
@@ -22,10 +22,12 @@ const USPS = require('usps-webtools-promise').default;
 import USPS from "usps-webtools-promise";
 
 const usps = new USPS({
+  // USPS returns ALL CAPS, this boolean turns on Proper Caps for both Street lines and City. This is an optional item. Defaults to true.
+  properCase: boolean,
+  // Staging will run all functions on the USPS Staging servers instead of Production. Defaults to false.
+  staging: boolean,
   // This can be created by going to https://www.usps.com/business/web-tools-apis/ and registering for an id
   userId: 'USPS User id',
-  // USPS returns ALL CAPS, this boolean turns on Proper Caps for both Street lines and City. This is an optional item.
-  properCase: boolean
 });
 ```
 
@@ -33,17 +35,17 @@ const usps = new USPS({
 
 Verify takes one parameter: object
 
-object: street1, street2, city, state, zip
+object: Address1, Address2, City, State, Zip
 
 __Example__
 
 ``` js
 usps.verify({
-  street1: '322 3rd st.',
-  street2: 'Apt 2',
-  city: 'San Francisco',
-  state: 'CA',
-  zip: '94103'
+  Address1: '322 3rd st.',
+  Address2: 'Apt 2',
+  City: 'San Francisco',
+  State: 'CA',
+  Zip: '94103'
 }).then(address => {
   console.log(address);
 });
@@ -53,16 +55,16 @@ usps.verify({
 
 zipCodeLookup takes one parameter: object.
 
-object: street1, street2, city, state
+object: Address1, Address2, City, State
 
 __Example__
 
 ``` js
 const address = await usps.zipCodeLookup({
-  street1: '322 3rd st.',
-  street2: 'Apt 2',
-  city: 'San Francisco',
-  state: 'CA'
+  Address1: '322 3rd st.',
+  Address2: 'Apt 2',
+  City: 'San Francisco',
+  State: 'CA'
 });
 
 console.log(address);
@@ -72,7 +74,7 @@ console.log(address);
 
 cityStateLookup takes one parameter: zipcode.
 
-zipcode: 5 digit zipcode as a string
+zipcode: 5 digit Zip Code as a string
 
 __Example__
 
