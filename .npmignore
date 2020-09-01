@@ -1,0 +1,7 @@
+.github
+.nyc_output
+src
+test
+.editorconfig
+.eslintignore
+.gitignore
