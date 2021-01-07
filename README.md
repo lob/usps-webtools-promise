@@ -45,7 +45,7 @@ usps.verify({
   Address2: 'Apt 2',
   City: 'San Francisco',
   State: 'CA',
-  Zip: '94103'
+  Zip5: '94103'
 }).then(address => {
   console.log(address);
 });

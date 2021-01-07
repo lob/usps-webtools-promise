@@ -110,7 +110,7 @@ export default async function (
         ? "stg-secure.shippingapis.com"
         : "secure.shippingapis.com",
     method: "GET",
-    path: `ShippingAPI.dll?${qs}`,
+    path: `/ShippingAPI.dll?${qs}`,
   };
 
   let uspsResponse;
