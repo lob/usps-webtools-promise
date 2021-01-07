@@ -21,8 +21,7 @@ import type {
   ZipCodeLookupRequest,
   ZipCodeLookupResponse,
 } from "../lookups/zip-code-lookup";
-import type { Config } from "../usps";
-import type { ErrorResponse } from "../usps";
+import type { Config, ErrorResponse } from "../usps";
 
 export interface USPSResponse {
   AddressValidateResponse?: AddressValidateResponse;
