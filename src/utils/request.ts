@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable security/detect-object-injection */
 // The objects being injected are always specified by the API //
 import { request, RequestOptions } from "https";
@@ -33,10 +31,10 @@ export interface USPSResponse {
 
 // This function runs the actual request. I've abstracted it out so it
 // can be used independently of AWS
-const makeRequest = async function (
+const makeRequest = async (
   options: string | RequestOptions | URL
-): Promise<USPSResponse> {
-  return new Promise((resolve, reject) => {
+): Promise<USPSResponse> =>
+  new Promise((resolve, reject) => {
     // This is the actual request
     const innerRequest = request(options, (response) => {
       let body = "";
@@ -60,12 +58,11 @@ const makeRequest = async function (
     // This ends the request
     innerRequest.end();
   });
-};
 
 /**
   Method to call USPS
 */
-export default async function (
+export default async (
   api: string,
   method: string,
   property: string,
@@ -81,7 +78,7 @@ export default async function (
   | CityStateLookupResponse
   | RateV4Response
   | ErrorResponse
-> {
+> => {
   const requestName = `${method}Request`;
   const responseName = `${method}Response`;
 
@@ -140,9 +137,11 @@ export default async function (
     // @ts-expect-error It does expect a string
     uspsResponse[responseName] &&
     // @ts-expect-error It does expect a string
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     uspsResponse[responseName][property]
   ) {
     // @ts-expect-error It does expect a string
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
     specificResult = uspsResponse[responseName][property];
 
     // specific error handling
@@ -153,4 +152,4 @@ export default async function (
     return specificResult;
   }
   throw new Error("Can't find result");
-}
+};

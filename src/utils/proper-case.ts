@@ -1,9 +1,10 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable security/detect-non-literal-regexp */
 export default (value: string): string => {
-  let string = value.replace(/([^\W_]+[^\s-]*) */g, (txt) => {
-    return txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase();
-  });
+  let string = value.replace(
+    /([^\W_]+[^\s-]*) */g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.slice(1).toLowerCase()
+  );
 
   // Certain minor words should be left lowercase unless
   // they are the first or last words in the string
@@ -30,25 +31,19 @@ export default (value: string): string => {
     "To",
     "With",
   ];
-  Object.keys(lowers).forEach((_value, index) => {
-    string = string.replace(
-      new RegExp(`\\s${lowers[index]}\\s`, "g"),
-      (txt) => {
-        return txt.toLowerCase();
-      }
+  for (const [index, _value] of Object.keys(lowers).entries()) {
+    string = string.replace(new RegExp(`\\s${lowers[index]}\\s`, "g"), (txt) =>
+      txt.toLowerCase()
     );
-  });
+  }
 
   // Certain words such as initialisms or acronyms should be left uppercase
   const uppers = ["Ne", "Nw", "Se", "Sw"];
-  Object.keys(uppers).forEach((_value, index) => {
-    string = string.replace(
-      new RegExp(`\\b${uppers[index]}\\b`, "g"),
-      (txt) => {
-        return txt.toUpperCase();
-      }
+  for (const [index, _value] of Object.keys(uppers).entries()) {
+    string = string.replace(new RegExp(`\\b${uppers[index]}\\b`, "g"), (txt) =>
+      txt.toUpperCase()
     );
-  });
+  }
 
   return string;
 };
