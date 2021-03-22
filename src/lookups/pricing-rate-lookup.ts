@@ -1,51 +1,122 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import type USPSClass from "../usps";
 import type { ErrorResponse } from "../usps";
 import callUSPS from "../utils/request";
-
-export interface PricingRateInput {
-  Container?: string;
-  Girth?: string;
-  Height?: string;
-  Length?: string;
-  Machinable?: string;
-  Ounces?: string;
-  Pounds?: string;
-  Service?: string;
-  Size?: string;
-  Width?: string;
-  ZipDestination?: string;
-  ZipOrigination?: string;
-}
 
 export interface RateV4Request {
   Package: {
     // @ID is a special tag for xmlbuilder
     "@ID": string;
     AmountToCollect?: string;
-    Container: string;
+    Container:
+      | "VARIABLE"
+      | "FLAT RATE ENVELOPE"
+      | "PADDED FLAT RATE ENVELOPE"
+      | "LEGAL FLAT RATE ENVELOPE"
+      | "SM FLAT RATE ENVELOPE"
+      | "WINDOW FLAT RATE ENVELOPE"
+      | "GIFT CARD FLAT RATE ENVELOPE"
+      | "SM FLAT RATE BOX"
+      | "MD FLAT RATE BOX"
+      | "LG FLAT RATE BOX"
+      | "REGIONALRATEBOXA"
+      | "REGIONALRATEBOXB"
+      | "CUBIC PARCELS"
+      | "CUBIC SOFT PACK";
     Content?: {
-      ContentDescription?: string;
-      ContentType?: string;
+      ContentDescription?: "BEES" | "DAYOLDPOULTRY" | "ADULTBIRDS" | "OTHER";
+      ContentType?:
+        | "HAZMAT"
+        | "CREMATEDREMAINS"
+        | "FRAGILE"
+        | "PERISHABLE"
+        | "PHARMACEUTICALS"
+        | "MEDICAL SUPPLIES"
+        | "LIVES";
     };
     DropOffTime?: string;
-    FirstClassMailType?: string;
+    FirstClassMailType?:
+      | "LETTER"
+      | "FLAT"
+      | "PACKAGE SERVICE RETAIL"
+      | "POSTCARD"
+      | "PACKAGE SERVICE";
     Girth?: string;
     GroundOnly?: boolean;
     Height?: string;
     Length?: string;
-    Machinable?: string;
+    Machinable?: boolean;
     Ounces: string;
     Pounds: string;
     ReturnDimensionalWeight?: boolean;
     ReturnLocations?: boolean;
     ReturnServiceInfo?: boolean;
-    Service: string;
+    Service:
+      | "FIRST CLASS COMMERCIAL"
+      | "FIRST CLASS"
+      | "FIRST CLASS COMMERCIAL"
+      | "FIRST CLASS HFP COMMERCIAL"
+      | "PARCEL SELECT GROUND"
+      | "PRIORITY"
+      | "PRIORITY COMMERCIAL"
+      | "PRIORITY CPP"
+      | "PRIORITY HFP COMMERCIAL"
+      | "PRIORITY HFP CPP"
+      | "PRIORITY MAIL EXPRESS"
+      | "PRIORITY MAIL EXPRESS COMMERCIAL"
+      | "PRIORITY MAIL EXPRESS CPP"
+      | "PRIORITY MAIL EXPRESS SH"
+      | "PRIORITY MAIL EXPRESS SH COMMERCIAL"
+      | "PRIORITY MAIL EXPRESS HFP"
+      | "PRIORITY MAIL EXPRESS HFP COMMERCIAL"
+      | "PRIORITY MAIL EXPRESS HFP CPP"
+      | "PRIORITY MAIL CUBIC"
+      | "RETAIL GROUND"
+      | "MEDIA"
+      | "LIBRARY"
+      | "ALL"
+      | "ONLINE"
+      | "PLUS"
+      | "BPM";
     ShipDate?: {
-      Option?: string;
+      Option?: "PEMSH" | "HFP";
     };
-    SortBy?: string;
+    SortBy?: "LETTER" | "LARGEENVELOPE" | "PACKAGE" | "FLATRATE";
     SpecialServices?: {
-      SpecialService?: string;
+      SpecialService?:
+        | "100"
+        | "101"
+        | "102"
+        | "103"
+        | "104"
+        | "105"
+        | "106"
+        | "108"
+        | "109"
+        | "110"
+        | "112"
+        | "118"
+        | "119"
+        | "120"
+        | "125"
+        | "155"
+        | "156"
+        | "160"
+        | "161"
+        | "170"
+        | "171"
+        | "172"
+        | "173"
+        | "174"
+        | "175"
+        | "176"
+        | "177"
+        | "178"
+        | "179"
+        | "180"
+        | "181"
+        | "182"
+        | "190";
     };
     TrackingRetentionPeriod?: string;
     Value?: string;
@@ -110,25 +181,8 @@ export interface RateV4Response {
 
 export default async function (
   this: USPSClass,
-  pricingRate: PricingRateInput
+  pricingRate: RateV4Request
 ): Promise<RateV4Postage | Error> {
-  const parameters: RateV4Request = {
-    Package: {
-      "@ID": "1ST",
-      Container: pricingRate.Container || "",
-      Girth: pricingRate.Girth,
-      Height: pricingRate.Height,
-      Length: pricingRate.Length,
-      Machinable: pricingRate.Machinable,
-      Ounces: pricingRate.Ounces || "",
-      Pounds: pricingRate.Pounds || "",
-      Service: pricingRate.Service || "PRIORITY",
-      Width: pricingRate.Width,
-      ZipDestination: pricingRate.ZipDestination || "",
-      ZipOrigination: pricingRate.ZipOrigination || "55401",
-    },
-  };
-
   let response: RateV4Response;
   try {
     response = (await callUSPS(
@@ -136,7 +190,7 @@ export default async function (
       "RateV4",
       "Package",
       this.config,
-      parameters
+      pricingRate
     )) as RateV4Response;
     if (response && response.Package) {
       return response.Package.Postage;
