@@ -101,10 +101,9 @@ export default async (
   const staging = config.staging ? config.staging : false;
 
   const options: RequestOptions = {
-    hostname:
-      staging === true
-        ? "stg-secure.shippingapis.com"
-        : "secure.shippingapis.com",
+    hostname: staging
+      ? "stg-secure.shippingapis.com"
+      : "secure.shippingapis.com",
     method: "GET",
     path: `/ShippingAPI.dll?${qs}`,
   };
