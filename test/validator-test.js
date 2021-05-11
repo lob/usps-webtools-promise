@@ -50,3 +50,18 @@ test("Address verify should validate Floor", async (t) => {
   });
   t.is(address.Address2, "FL 2");
 });
+
+test("Multiple Businesses as single locaion", async (t) => {
+  const error = await t.throwsAsync(async () => {
+    await usps.verify({
+      Address1: "1212 s kingsway rd",
+      City: "seffner",
+      State: "fl",
+      Zip5: "33584",
+    });
+  });
+  t.is(
+    error.message,
+    "Error: Multiple addresses were found for the information you entered, and no default exists."
+  );
+});
