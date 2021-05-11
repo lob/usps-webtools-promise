@@ -1,12 +1,6 @@
 const test = require("ava");
 const USPS = require("../dist/usps").default;
 
-// Load .env
-if (process.env.NODE_ENV !== "production") {
-  // eslint-disable-next-line global-require
-  require("dotenv").config({ path: "test/.env" });
-}
-
 const usps = new USPS({
   userId: process.env.USPS_ID,
 });
