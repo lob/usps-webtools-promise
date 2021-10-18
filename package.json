@@ -35,23 +35,22 @@
     "standardization"
   ],
   "dependencies": {
-    "xmlbuilder2": "^2.4.1"
+    "xmlbuilder2": "^3.0.2"
   },
   "devDependencies": {
-    "@sparticuz/eslint-config": "^3.5.3",
-    "@types/node": "^15.0.2",
-    "@typescript-eslint/eslint-plugin": "^4.23.0",
-    "@typescript-eslint/parser": "^4.23.0",
+    "@sparticuz/eslint-config": "^5.0.0",
+    "@types/node": "^16.11.1",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "ava": "^3.15.0",
-    "c8": "^7.7.2",
-    "eslint": "^7.26.0",
-    "prettier": "^2.3.0",
-    "string.prototype.trimend": "^1.0.4",
-    "typescript": "^4.2.4"
+    "c8": "^7.10.0",
+    "eslint": "^7.32.0",
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.4"
   },
   "repository": "https://github.com/Sparticuz/usps-webtools-promise.git",
   "engines": {
-    "node": ">=10.x"
+    "node": ">=12.x"
   },
   "license": "MIT"
 }
